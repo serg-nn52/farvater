@@ -21,38 +21,61 @@
           placeholder="Выберите"
           ref="select"
           v-model:value="sortMethod"
-          @focus="focus"
-          @change="handleChange"
         >
-          <a-select-option value="method1">Метод1</a-select-option>
+          <a-select-option value="bubbling"
+            >Сортировка пузырьком</a-select-option
+          >
           <a-select-option value="method2">Метод2</a-select-option>
           <a-select-option value="method3">Метод3</a-select-option>
         </a-select>
       </a-space>
-      <a-button type="primary">Старт!</a-button>
+      <a-button type="primary" @click="sendData">Старт!</a-button>
+    </div>
+    <div class="delay">
+      <h3>Задержка</h3>
+      <a-input-number v-model:value="delay" :min="0" :max="50" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { mapActions } from "vuex";
 export default defineComponent({
   setup() {
     const quantity = ref(0);
     const sortMethod = ref();
-    const focus = () => {
-      console.log("focus");
-    };
+    const delay = ref(0);
 
-    const handleChange = (value: string) => {
-      console.log(`selected ${value}`);
-    };
     return {
       quantity,
       sortMethod,
-      focus,
-      handleChange,
+      delay,
     };
+  },
+  methods: {
+    ...mapActions(["sortBubbleAction"]),
+    sendData() {
+      const tempArray: number[] = [];
+      for (let i = 0; i < this.quantity; i++) {
+        const random = Math.ceil(Math.random() * 100000);
+        !tempArray.includes(random) && tempArray.push(random);
+      }
+      this.sortMethod && this.$store.commit("statusMutation", "start");
+      this.sortMethod &&
+        this.$store.commit("addData", {
+          quantity: this.quantity,
+          method: this.sortMethod,
+          array: tempArray,
+          delay: this.delay,
+        });
+      setTimeout(() => {
+        if (this.sortMethod === "bubbling") {
+          this.$store.dispatch("sortBubbleAction");
+        } else return;
+        this.$store.commit("statusMutation", "sorting");
+      }, 1000);
+    },
   },
 });
 </script>
