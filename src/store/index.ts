@@ -63,7 +63,7 @@ export default createStore<State>({
       state.indexArray = [];
       state.quantity = 0;
       state.method = "";
-      state.status = "stop";
+      state.status = "";
       state.delay = 0;
     },
   },
@@ -71,21 +71,15 @@ export default createStore<State>({
     async sortAction(ctx) {
       const { commit, state, getters } = ctx;
 
-      let sortArr: number[] | undefined;
-
       commit("statusMutation", "sorting");
       if (getters.getMethod === "bubbling") {
-        sortArr = await bubbleSort(state.array, getters.getDelay);
+        await bubbleSort(state.array, getters.getDelay);
       } else if (getters.getMethod === "insertionSort") {
-        sortArr = await insertionSort(state.array, getters.getDelay);
+        await insertionSort(state.array, getters.getDelay);
       } else if (getters.getMethod === "selectionSort") {
-        sortArr = await selectionSort(state.array, getters.getDelay);
+        await selectionSort(state.array, getters.getDelay);
       }
-
-      if (getters.getStatus !== "stop") {
-        commit("sortArrayMutation", sortArr);
-        commit("statusMutation", "finish");
-      }
+      commit("statusMutation", "finish");
     },
   },
 });

@@ -34,7 +34,7 @@ export const bubbleSort = async (
       }
     }
   }
-  return arr;
+  // return arr;
 };
 
 //вставки
