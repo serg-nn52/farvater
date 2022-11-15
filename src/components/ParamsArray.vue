@@ -64,7 +64,6 @@ export default defineComponent({
   methods: {
     ...mapActions(["sortAction", "stopMutation"]),
     sendData() {
-      this.$store.commit("stopMutation");
       const tempArray: number[] = [];
       for (let i = 0; i < this.quantity; i++) {
         const random = Math.ceil(Math.random() * 100000);
