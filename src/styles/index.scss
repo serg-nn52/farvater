@@ -14,7 +14,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: $white;
 }
-
+* {
+  box-sizing: border-box;
+}
 .container {
   width: 1440px;
   padding: 0 20px;

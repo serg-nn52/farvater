@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
-    <div class="quantity">
-      <h3>Выберите количество элементов массива</h3>
+    <div class="quantity group">
+      <h3>Количество элементов массива</h3>
       <div class="inputs">
         <a-slider
           class="slider"
@@ -13,27 +13,35 @@
         <a-input-number v-model:value="quantity" :min="100" :max="1000" />
       </div>
     </div>
-    <div class="method">
-      <h3>Выберите метод сортировки</h3>
-      <a-space>
-        <a-select
-          class="select1"
-          placeholder="Выберите"
-          ref="select"
-          v-model:value="sortMethod"
-        >
-          <a-select-option value="bubbling"
-            >Сортировка пузырьком</a-select-option
-          >
-          <a-select-option value="method2">Метод2</a-select-option>
-          <a-select-option value="method3">Метод3</a-select-option>
-        </a-select>
-      </a-space>
-      <a-button type="primary" @click="sendData">Старт!</a-button>
-    </div>
-    <div class="delay">
+    <div class="delay group">
       <h3>Задержка</h3>
-      <a-input-number v-model:value="delay" :min="0" :max="50" />
+      <a-input-number
+        class="input-delay"
+        v-model:value="delay"
+        :min="0"
+        :max="50"
+      />
+    </div>
+    <div class="method group">
+      <h3>Метод сортировки</h3>
+      <a-select
+        class="select-method"
+        placeholder="Выберите метод"
+        ref="select"
+        v-model:value="sortMethod"
+      >
+        <a-select-option value="bubbling">Сортировка пузырьком</a-select-option>
+        <a-select-option value="insertionSort"
+          >Сортировка вставками</a-select-option
+        >
+        <a-select-option value="selectionSort"
+          >Сортировка выбором</a-select-option
+        >
+      </a-select>
+    </div>
+    <div class="buttons group">
+      <a-button type="primary" @click="sendData">Старт</a-button>
+      <a-button type="primary" @click="stopSorting">Стоп</a-button>
     </div>
   </div>
 </template>
@@ -44,7 +52,7 @@ import { mapActions } from "vuex";
 export default defineComponent({
   setup() {
     const quantity = ref(0);
-    const sortMethod = ref();
+    const sortMethod = ref("");
     const delay = ref(0);
 
     return {
@@ -54,50 +62,98 @@ export default defineComponent({
     };
   },
   methods: {
-    ...mapActions(["sortBubbleAction"]),
+    ...mapActions(["sortAction"]),
     sendData() {
       const tempArray: number[] = [];
       for (let i = 0; i < this.quantity; i++) {
         const random = Math.ceil(Math.random() * 100000);
         !tempArray.includes(random) && tempArray.push(random);
       }
-      this.sortMethod && this.$store.commit("statusMutation", "start");
-      this.sortMethod &&
+      if (this.sortMethod && this.quantity) {
+        this.$store.commit("statusMutation", "start");
         this.$store.commit("addData", {
           quantity: this.quantity,
           method: this.sortMethod,
           array: tempArray,
           delay: this.delay,
         });
+      } else {
+        return;
+      }
+
       setTimeout(() => {
-        if (this.sortMethod === "bubbling") {
-          this.$store.dispatch("sortBubbleAction");
-        } else return;
-        this.$store.commit("statusMutation", "sorting");
+        this.$store.dispatch("sortAction");
       }, 1000);
+    },
+    stopSorting() {
+      this.$store.commit("stopMutation");
     },
   },
 });
 </script>
 <style lang="scss" scoped>
+@import "@/styles/media";
 .wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-content: center;
-  gap: 50px;
+  grid-gap: 50px;
+  @include media-breakpoint-down(xl) {
+    grid-template-columns: max-content max-content;
+    grid-template-rows: max-content max-content;
+    justify-content: center;
+  }
+  @media (max-width: 630px) {
+    grid-template-columns: 60% 30%;
+  }
+  @include media-breakpoint-down(sm) {
+    grid-gap: 30px;
+  }
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+h3 {
+  text-align: center;
+  @media (max-width: 400px) {
+    font-size: 18px;
+  }
+}
+.delay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .input-delay {
+    width: 100%;
+  }
 }
 .inputs {
   display: flex;
+  justify-content: center;
   gap: 20px;
+  width: 480px;
+  @include media-breakpoint-down(md) {
+    width: 100%;
+  }
 }
 .slider {
-  width: 400px;
-}
-.quantity {
-  width: 600px;
+  width: 100%;
 }
 
-.select1 {
+.select-method {
   width: 300px;
+  @include media-breakpoint-down(xl) {
+    width: 100%;
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
 }
 .icon-wrapper {
   position: relative;
