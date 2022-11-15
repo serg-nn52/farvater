@@ -2,7 +2,7 @@
   "name": "farvater",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://serg-nn52.github.io/farvater/",
+  "homepage": "/farvater/",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

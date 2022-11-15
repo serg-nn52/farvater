@@ -52,7 +52,7 @@ import { mapActions } from "vuex";
 export default defineComponent({
   setup() {
     const quantity = ref(0);
-    const sortMethod = ref("");
+    const sortMethod = ref();
     const delay = ref(0);
 
     return {
