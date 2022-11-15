@@ -23,6 +23,7 @@ export const sleep = (milliseconds: number) => {
 export const bubbleSort = async (
   arr: number[],
   delay: number,
+  id: number,
   compare = defaultCompare
 ) => {
   const { length } = arr;
@@ -34,13 +35,14 @@ export const bubbleSort = async (
       }
     }
   }
-  // return arr;
+  return id;
 };
 
 //вставки
 export const insertionSort = async (
   arr: number[],
   delay: number,
+  id: number,
   compare = defaultCompare
 ) => {
   const { length } = arr;
@@ -55,12 +57,13 @@ export const insertionSort = async (
     }
     arr[j] = temp;
   }
-  return arr;
+  return id;
 };
 //выбором
 export const selectionSort = async (
   arr: number[],
   delay: number,
+  id: number,
   compare = defaultCompare
 ) => {
   const { length } = arr;
@@ -78,5 +81,5 @@ export const selectionSort = async (
       swap(arr, i, minIndex);
     }
   }
-  return arr;
+  return id;
 };

@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default defineComponent({
   setup() {
     const quantity = ref(0);
@@ -61,6 +61,7 @@ export default defineComponent({
       delay,
     };
   },
+  computed: mapGetters(["getStatus"]),
   methods: {
     ...mapActions(["sortAction", "stopMutation"]),
     sendData() {

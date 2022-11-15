@@ -8,6 +8,7 @@ export interface State {
   method: string;
   status: string;
   delay: number;
+  id: number;
 }
 
 export default createStore<State>({
@@ -18,6 +19,7 @@ export default createStore<State>({
     method: "",
     status: "",
     delay: 0,
+    id: 0,
   },
   getters: {
     getArray(state: State) {
@@ -43,6 +45,9 @@ export default createStore<State>({
     getMethod(state: State) {
       return state.method;
     },
+    getId(state: State) {
+      return state.id;
+    },
   },
   mutations: {
     addData(state: State, { quantity, method, array, delay }) {
@@ -51,6 +56,7 @@ export default createStore<State>({
       state.array = array;
       state.indexArray = [...array];
       state.delay = delay;
+      state.id = Math.random();
     },
     sortArrayMutation(state: State, sortArr: number[]) {
       state.array = sortArr;
@@ -70,16 +76,30 @@ export default createStore<State>({
   actions: {
     async sortAction(ctx) {
       const { commit, state, getters } = ctx;
-
       commit("statusMutation", "sorting");
+      //привязываюсь к id, чтобы присвоить finish именно текущему действию
       if (getters.getMethod === "bubbling") {
-        await bubbleSort(state.array, getters.getDelay);
+        const id = await bubbleSort(
+          state.array,
+          getters.getDelay,
+          getters.getId
+        );
+        getters.getId === id && commit("statusMutation", "finish");
       } else if (getters.getMethod === "insertionSort") {
-        await insertionSort(state.array, getters.getDelay);
+        const id = await insertionSort(
+          state.array,
+          getters.getDelay,
+          getters.getId
+        );
+        getters.getId === id && commit("statusMutation", "finish");
       } else if (getters.getMethod === "selectionSort") {
-        await selectionSort(state.array, getters.getDelay);
+        const id = await selectionSort(
+          state.array,
+          getters.getDelay,
+          getters.getId
+        );
+        getters.getId === id && commit("statusMutation", "finish");
       }
-      commit("statusMutation", "finish");
     },
   },
 });
