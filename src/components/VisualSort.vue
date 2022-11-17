@@ -1,15 +1,13 @@
 <template>
-  <div class="container">
-    <div class="visual">
-      <div
-        ref="inner"
-        :class="{ start: getStatus === 'start' }"
-        class="inner"
-        :style="{ height: item + 'px', width: widthItemArray + 'px' }"
-        :key="getIndexArray[i]"
-        v-for="(item, i) in heightItemArray"
-      ></div>
-    </div>
+  <div class="visual">
+    <div
+      ref="inner"
+      :class="{ start: getStatus === 'start' }"
+      class="inner"
+      :style="{ height: item + 'px', width: widthItemArray + 'px' }"
+      :key="getIndexArray[i]"
+      v-for="(item, i) in heightItemArray"
+    ></div>
   </div>
 </template>
 
