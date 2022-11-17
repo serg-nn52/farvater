@@ -51,7 +51,7 @@ import { defineComponent, ref } from "vue";
 import { mapActions, mapGetters } from "vuex";
 export default defineComponent({
   setup() {
-    const quantity = ref(0);
+    const quantity = ref(100);
     const sortMethod = ref();
     const delay = ref(0);
 
